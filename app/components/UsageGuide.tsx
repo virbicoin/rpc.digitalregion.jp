@@ -4,13 +4,16 @@ import React from "react";
 
 const UsageGuide: React.FC = () => {
   return (
-    <div className="mt-6">
-      <h2 className="text-2xl font-semibold">Usage Guide</h2>
-      <p className="mt-2">
-        To connect to the node, use the RPC URL provided above. Ensure your client is configured to handle JSON-RPC requests.
+    <div className="bg-white p-4 rounded-lg shadow-md mt-6">
+      <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Usage Guide</h2>
+      <p className="text-gray-700">
+        To use this service, click on the provided website link. You can easily check the necessary information on the website.
       </p>
-      <p className="mt-2">
-        For WebSocket connections, use the WebSocket URL for real-time data streaming.
+      <p className="mt-4 text-gray-700">
+        To get real-time information, use the refresh button on the website.
+      </p>
+      <p className="mt-4 text-gray-700">
+        If you need more detailed information, please contact the support team.
       </p>
     </div>
   );
