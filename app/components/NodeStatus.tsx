@@ -51,6 +51,8 @@ const NodeStatus: React.FC = () => {
         let isServerRunning = false;
         let clientName = "Unknown";
         let clientVersion = "Unknown";
+        let blockHeight = 0;
+        let peers = 0;
 
         // Check if server is running using net_listening
         const netListeningResponse = await fetch(node.url, {
@@ -91,13 +93,12 @@ const NodeStatus: React.FC = () => {
           const clientVersionData: JsonRpcResponse = await clientVersionResponse.json();
           if (clientVersionData.result && typeof clientVersionData.result === "string") {
             const [name, versionOsGo] = clientVersionData.result.split("/");
-            clientName = name; // クライアント名
+            clientName = name;
 
-            // 分割処理を修正
             const versionOsParts = versionOsGo.split("-");
             if (versionOsParts.length >= 3) {
               const [version] = versionOsParts;
-              clientVersion = version; // バージョン
+              clientVersion = version;
             } else {
               clientVersion = "Unknown";
             }
@@ -119,8 +120,6 @@ const NodeStatus: React.FC = () => {
         });
 
         const blockNumberData: JsonRpcResponse = await blockNumberResponse.json();
-        let blockHeight = 0;
-
         if (blockNumberData.result && typeof blockNumberData.result === "string") {
           blockHeight = parseInt(blockNumberData.result, 16);
         }
@@ -140,8 +139,6 @@ const NodeStatus: React.FC = () => {
         });
 
         const peerCountData: JsonRpcResponse = await peerCountResponse.json();
-        let peers = 0;
-
         if (peerCountData.result && typeof peerCountData.result === "string") {
           peers = parseInt(peerCountData.result, 16);
         }
@@ -157,7 +154,22 @@ const NodeStatus: React.FC = () => {
         return { isServerRunning, lastChecked, blockHeight, peers, clientName, clientVersion };
       } catch (err) {
         console.error(`Error fetching data for node ${node.name}:`, err);
-        return null;
+
+        // エラーが発生した場合でも現在の時刻を設定
+        const now = new Date();
+        const lastChecked = new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "medium",
+        }).format(now);
+
+        return {
+          isServerRunning: false,
+          lastChecked, // 現在の時刻を設定
+          blockHeight: 0,
+          peers: 0,
+          clientName: "Unknown",
+          clientVersion: "Unknown",
+        };
       }
     };
 
@@ -186,7 +198,7 @@ const NodeStatus: React.FC = () => {
         );
         console.log("All nodes fetched:", updatedData);
         setStatusData(updatedData);
-    
+
         // 最終更新時刻を設定
         const now = new Date();
         const formattedTime = new Intl.DateTimeFormat(undefined, {
@@ -194,11 +206,11 @@ const NodeStatus: React.FC = () => {
           timeStyle: "medium",
         }).format(now);
         setLastUpdated(formattedTime);
-    
+
         // キャッシュに保存
         localStorage.setItem("nodeStatusData", JSON.stringify(updatedData));
         localStorage.setItem("lastUpdated", formattedTime);
-    
+
         setLoading(false);
         console.log("Loading state set to false");
       } catch (error) {
@@ -211,7 +223,7 @@ const NodeStatus: React.FC = () => {
       console.log("Loading data from cache...");
       const cachedData = localStorage.getItem("nodeStatusData");
       const cachedLastUpdated = localStorage.getItem("lastUpdated");
-    
+
       if (cachedData && cachedLastUpdated) {
         console.log("Cache found");
         setStatusData(JSON.parse(cachedData));
@@ -227,7 +239,7 @@ const NodeStatus: React.FC = () => {
         console.log("No cached lastUpdated found, should update.");
         return true;
       }
-    
+
       const lastUpdatedTime = new Date(cachedLastUpdated).getTime();
       const currentTime = new Date().getTime();
       const shouldUpdate = currentTime - lastUpdatedTime > 10 * 60 * 1000; // 10分以上経過しているか
@@ -244,7 +256,7 @@ const NodeStatus: React.FC = () => {
       console.log("Cache is up-to-date, skipping fetch.");
       setLoading(false); // キャッシュが有効な場合、ローディング状態を解除
     }
-  
+
     // 10分ごとに更新
     const interval = setInterval(fetchAllNodes, 10 * 60 * 1000);
     return () => clearInterval(interval); // クリーンアップ
