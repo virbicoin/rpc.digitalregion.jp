@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "VirBiCoin Node Information",
-  description: "VirBiCoin Node Information",
+  description: "VirBiCoin VBC Cryptocurrency NFT",
 };
 
 export default function RootLayout({
