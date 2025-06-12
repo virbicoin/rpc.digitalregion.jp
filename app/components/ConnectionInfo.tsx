@@ -5,7 +5,7 @@ import React from "react";
 const ConnectionInfo: React.FC = () => {
   const connectionData = {
     rpcUrl: "https://rpc.digitalregion.jp",
-    websocketUrl: "wss://rpc.digitalregion.jp",
+    websocketUrl: "wss://ws.digitalregion.jp",
   };
 
   return (
