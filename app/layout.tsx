@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   title: "VirBiCoin Node Information",
   description: "VirBiCoin VBC Cryptocurrency NFT",
 };
+export const styles = {
+  main: "max-w-screen-lg mx-auto px-4",
+  footer: "max-w-screen-lg mx-auto px-4",
+};
+
+
 
 export default function RootLayout({
   children,
@@ -25,9 +31,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
       >
-        {children}
+        <header className="w-full bg-gray-800 py-6 shadow-lg">
+          <div className="max-w-screen-lg mx-auto px-4">
+            <h1 className="text-4xl font-bold text-white text-center">
+              VirBiCoin Node Information
+            </h1>
+          </div>
+        </header>
+        <main>
+          <div className="max-w-screen-lg mx-auto px-4">
+            {children}
+          </div>
+        </main>
+        <footer className="w-full bg-gray-800">
+          <div className="max-w-screen-lg mx-auto px-4 text-center py-6 text-white text-base">
+            <p>
+              © {new Date().getFullYear()} Digitalregion, Inc.
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );

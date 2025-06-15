@@ -18,6 +18,7 @@ export async function GET(request: NextRequest, context: unknown) {
     const { params } = context as { params: { NODE_NAME: string } };
     const nodeName = params.NODE_NAME;
     const nodeUrl = nodes[nodeName];
+    
     if (!nodeUrl) {
         return NextResponse.json({ error: "Node not found" }, { status: 404 });
     }
