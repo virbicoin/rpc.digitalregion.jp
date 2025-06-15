@@ -16,12 +16,6 @@ export const metadata: Metadata = {
   title: "VirBiCoin Node Information",
   description: "VirBiCoin VBC Cryptocurrency NFT",
 };
-export const styles = {
-  main: "max-w-screen-lg mx-auto px-4",
-  footer: "max-w-screen-lg mx-auto px-4",
-};
-
-
 
 export default function RootLayout({
   children,
@@ -40,10 +34,8 @@ export default function RootLayout({
             </h1>
           </div>
         </header>
-        <main>
-          <div className="max-w-screen-lg mx-auto px-4">
-            {children}
-          </div>
+        <main className="max-w-screen-lg mx-auto px-4">
+          {children}
         </main>
         <footer className="w-full bg-gray-800">
           <div className="max-w-screen-lg mx-auto px-4 text-center py-6 text-white text-base">
