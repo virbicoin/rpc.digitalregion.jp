@@ -40,7 +40,7 @@ export default function RootLayout({
         <footer className="w-full bg-gray-800">
           <div className="max-w-screen-lg mx-auto px-4 text-center py-6 text-white text-base">
             <p>
-              © {new Date().getFullYear()} Digitalregion, Inc.
+              &copy; {new Date().getFullYear()} Digitalregion, Inc. All Rights Reserved.
             </p>
           </div>
         </footer>
