@@ -34,13 +34,12 @@ export default function RootLayout({
             </h1>
           </div>
         </header>
-        <main className="max-w-screen-lg mx-auto px-4">
-          {children}
-        </main>
+        <main className="max-w-screen-lg mx-auto px-4">{children}</main>
         <footer className="w-full bg-gray-800">
           <div className="max-w-screen-lg mx-auto px-4 text-center py-6 text-white text-base">
             <p>
-              &copy; {new Date().getFullYear()} Digitalregion, Inc. All Rights Reserved.
+              &copy; {new Date().getFullYear()} Digitalregion, Inc. All Rights
+              Reserved.
             </p>
           </div>
         </footer>
