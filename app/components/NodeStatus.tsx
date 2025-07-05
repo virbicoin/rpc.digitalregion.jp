@@ -59,6 +59,25 @@ const NodeStatus: React.FC = () => {
     fetchNodes();
   }, []);
 
+  // ホスト名を取得してコンソールに表示
+  useEffect(() => {
+    const fetchHostname = async () => {
+      try {
+        const res = await fetch('/api/hostname');
+        const data = await res.json();
+        if (data.success) {
+          console.log('Node Name:', data.hostname);
+        } else {
+          console.warn('Failed to retrieve hostname:', data.error);
+        }
+      } catch (error) {
+        console.error('Error while fetching hostname:', error);
+      }
+    };
+
+    fetchHostname();
+  }, []);
+
   // ノードステータスの取得
   useEffect(() => {
     const fetchAllNodes = async () => {
