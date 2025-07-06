@@ -3,7 +3,7 @@
   "version": "0.2.6",
   "private": true,
   "scripts": {
-    "dev": "next dev'",
+    "dev": "next dev",
     "dev:port": "next dev",
     "build": "next build",
     "start": "bash -c 'set -a; [ -f .env ] && source .env; set +a; next start'",

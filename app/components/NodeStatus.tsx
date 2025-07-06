@@ -154,6 +154,22 @@ const NodeStatus: React.FC = () => {
     fetchAllNodes();
   }, [nodes]);
 
+  // Healthチェック（Healthy, ホストネーム, 時刻）
+  useEffect(() => {
+    const fetchHealth = async () => {
+      try {
+        const res = await fetch('/health');
+        const data = await res.json();
+        console.log('Health:', data.status);
+        console.log('Hostname:', data.hostname);
+        console.log('Time:', data.time);
+      } catch (error) {
+        console.error('Healthチェック失敗:', error);
+      }
+    };
+    fetchHealth();
+  }, []);
+
   if (loading) {
     return (
       <div className="mt-6 bg-gray-100 p-6 rounded-lg shadow-md max-w-screen-lg mx-auto">
