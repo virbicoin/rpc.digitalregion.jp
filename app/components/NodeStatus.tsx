@@ -22,6 +22,10 @@ const NodeStatus: React.FC = () => {
   const [statusData, setStatusData] = useState<Record<number, NodeStatus>>({});
   const [loading, setLoading] = useState<boolean>(true);
 
+  // ブラウザのロケールとタイムゾーンを取得
+  const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
+  const timeZone = typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'UTC';
+
   // ノード一覧の取得
   useEffect(() => {
     const fetchNodes = async () => {
@@ -93,11 +97,11 @@ const NodeStatus: React.FC = () => {
           const formattedVersion =
             data.clientVersion?.split("/").slice(0, 2).join("/") || "Unknown";
           const now = new Date();
-          const lastChecked = new Intl.DateTimeFormat(undefined, {
-            dateStyle: "short",
-            timeStyle: "medium",
+          const lastChecked = new Intl.DateTimeFormat(locale, {
+            dateStyle: 'short',
+            timeStyle: 'long',
+            timeZone,
           }).format(now);
-
           updatedStatusData[node.id] = {
             lastChecked,
             blockHeight: data.blockHeight || 0,
@@ -108,9 +112,10 @@ const NodeStatus: React.FC = () => {
         } catch (error) {
           console.error(`Error fetching data for node ${node.name}:`, error);
           const now = new Date();
-          const lastChecked = new Intl.DateTimeFormat(undefined, {
-            dateStyle: "short",
-            timeStyle: "medium",
+          const lastChecked = new Intl.DateTimeFormat(locale, {
+            dateStyle: 'short',
+            timeStyle: 'long',
+            timeZone,
           }).format(now);
           updatedStatusData[node.id] = {
             lastChecked,
@@ -143,9 +148,16 @@ const NodeStatus: React.FC = () => {
         const data = await res.json();
         console.log('Health:', data.status);
         console.log('Hostname:', data.hostname);
-        console.log('Time:', data.time);
+        // 日時をブラウザロケール・タイムゾーンで表示
+        const healthTime = new Date(data.time);
+        const formattedHealthTime = new Intl.DateTimeFormat(locale, {
+          dateStyle: 'short',
+          timeStyle: 'long',
+          timeZone,
+        }).format(healthTime);
+        console.log('Time:', formattedHealthTime);
       } catch (error) {
-        console.error('Healthチェック失敗:', error);
+        console.error('Health check failed:', error);
       }
     };
     fetchHealth();

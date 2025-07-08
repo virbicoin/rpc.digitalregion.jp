@@ -42,7 +42,7 @@ const ConnectionInfo: React.FC = () => {
       const now = new Date();
       const lastChecked = new Intl.DateTimeFormat(undefined, {
         dateStyle: "short",
-        timeStyle: "medium",
+        timeStyle: "long",
       }).format(now);
 
       try {
