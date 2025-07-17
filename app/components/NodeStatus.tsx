@@ -88,12 +88,24 @@ const NodeStatus: React.FC = () => {
         try {
           const encodedNodeName = encodeURIComponent(node.name);
           const res = await fetch(`/api/nodes/${encodedNodeName}`);
-          if (!res.ok)
+          
+          if (!res.ok) {
+            // 502, 503は特別な処理
+            if (res.status === 502 || res.status === 503) {
+              throw new Error(`Node ${node.name} is temporarily unavailable (${res.status})`);
+            }
             throw new Error(
               `Failed to fetch data for node ${node.name}: ${res.status}`,
             );
+          }
 
           const data = await res.json();
+          
+          // エラーレスポンスの場合は例外を投げる
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          
           const formattedVersion =
             data.clientVersion?.split("/").slice(0, 2).join("/") || "Unknown";
           const now = new Date();
