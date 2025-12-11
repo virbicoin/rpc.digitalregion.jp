@@ -7,7 +7,7 @@ interface Node {
   name: string;
 }
 
-interface NodeStatus {
+interface NodeStatusData {
   lastChecked: string;
   blockHeight: number | null;
   peers: number | null;
@@ -17,10 +17,10 @@ interface NodeStatus {
 
 const CACHE_DURATION = 5 * 60 * 1000; // 5分（ミリ秒）
 
-const NodeStatus: React.FC = () => {
+export default function NodeStatus() {
   const [nodes, setNodes] = useState<Node[]>([]);
-  const [statusData, setStatusData] = useState<Record<number, NodeStatus>>({});
-  const [loading, setLoading] = useState<boolean>(true);
+  const [statusData, setStatusData] = useState<Record<number, NodeStatusData>>({});
+  const [loading, setLoading] = useState(true);
 
   // ブラウザのロケールとタイムゾーンを取得
   const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
@@ -82,7 +82,7 @@ const NodeStatus: React.FC = () => {
         }
       }
 
-      const updatedStatusData: Record<number, NodeStatus> = {};
+      const updatedStatusData: Record<number, NodeStatusData> = {};
 
       const fetchPromises = nodes.map(async (node) => {
         try {
@@ -150,7 +150,7 @@ const NodeStatus: React.FC = () => {
     };
 
     fetchAllNodes();
-  }, [nodes]);
+  }, [nodes, locale, timeZone]);
 
   // Healthチェック（Healthy, ホストネーム, 時刻）
   useEffect(() => {
@@ -173,17 +173,22 @@ const NodeStatus: React.FC = () => {
       }
     };
     fetchHealth();
-  }, []);
+  }, [locale, timeZone]);
 
   if (loading) {
     return (
-      <div className="mt-6 bg-gray-100 p-6 rounded-lg shadow-md max-w-screen-lg mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Node Status
-        </h2>
-        <div className="flex flex-col items-center justify-center space-y-4 py-8">
+      <div className="glass-card p-6 animate-fade-in">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-primary">Node Status</h2>
+        </div>
+        <div className="flex flex-col items-center justify-center space-y-4 py-12">
           <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <div className="text-lg font-semibold text-gray-700 animate-pulse">
+          <div className="text-lg font-medium text-muted animate-pulse">
             Loading Node Status...
           </div>
         </div>
@@ -192,93 +197,78 @@ const NodeStatus: React.FC = () => {
   }
 
   return (
-    <div className="mt-6 bg-gray-100 p-6 rounded-lg shadow-md max-w-screen-lg mx-auto">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-        Node Status
-      </h2>
-      <div className="bg-gray-50 rounded-xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                  Server
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                  Running
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                  Height
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                  Peers
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                  Version
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                  Last Checked
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {nodes && nodes.length > 0 ? (
-                nodes.map((node) => (
-                  <tr
-                    key={node.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="px-4 py-3 text-gray-900 font-bold">
-                      <span className="inline-flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
-                        <span className="font-mono">{node.name}</span>
+    <div className="glass-card p-6 animate-fade-in">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold text-primary">Node Status</h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Server</th>
+              <th>Status</th>
+              <th>Block Height</th>
+              <th>Peers</th>
+              <th>Version</th>
+              <th>Last Checked</th>
+            </tr>
+          </thead>
+          <tbody>
+            {nodes && nodes.length > 0 ? (
+              nodes.map((node) => (
+                <tr key={node.id}>
+                  <td>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"></span>
+                      <span className="font-mono font-medium text-primary">{node.name}</span>
+                    </span>
+                  </td>
+                  <td>
+                    {statusData[node.id]?.isServerRunning === null ? (
+                      <span className="status-loading inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
+                        Loading...
                       </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {statusData[node.id]?.isServerRunning === null ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                          Loading...
-                        </span>
-                      ) : statusData[node.id]?.isServerRunning ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          Online
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                          Offline
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-gray-900 font-mono">
-                      {statusData[node.id]?.blockHeight ?? "Loading..."}
-                    </td>
-                    <td className="px-4 py-3 text-gray-900 font-mono">
-                      {statusData[node.id]?.peers ?? "Loading..."}
-                    </td>
-                    <td className="px-4 py-3 text-gray-900 font-mono whitespace-nowrap">
-                      {statusData[node.id]?.clientVersion ?? "Loading..."}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 font-mono whitespace-nowrap">
-                      {statusData[node.id]?.lastChecked ?? "Loading..."}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="px-4 py-3 text-center text-gray-500"
-                  >
-                    No nodes available
+                    ) : statusData[node.id]?.isServerRunning ? (
+                      <span className="status-online inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-400 mr-1.5 animate-pulse"></span>
+                        Online
+                      </span>
+                    ) : (
+                      <span className="status-offline inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 mr-1.5"></span>
+                        Offline
+                      </span>
+                    )}
+                  </td>
+                  <td className="font-mono text-secondary">
+                    {statusData[node.id]?.blockHeight?.toLocaleString() ?? "—"}
+                  </td>
+                  <td className="font-mono text-secondary">
+                    {statusData[node.id]?.peers ?? "—"}
+                  </td>
+                  <td className="font-mono text-secondary whitespace-nowrap">
+                    {statusData[node.id]?.clientVersion ?? "—"}
+                  </td>
+                  <td className="text-muted text-sm whitespace-nowrap">
+                    {statusData[node.id]?.lastChecked ?? "—"}
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center text-muted py-8">
+                  No nodes available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-};
-
-export default NodeStatus;
+}

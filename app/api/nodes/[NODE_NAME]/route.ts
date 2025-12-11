@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { nodes } from "../data";
+import { nodes } from "@/app/api/nodes/data";
 
 const fetchWithTimeout = async (
   url: string,
@@ -25,7 +25,7 @@ const fetchWithTimeout = async (
 // リトライ機能付きRPCリクエスト
 const fetchRpcWithRetry = async (
   url: string,
-  payload: any,
+  payload: { jsonrpc: string; id: number; method: string; params?: unknown[] },
   maxRetries: number = 2,
   timeout: number = 5000,
 ) => {
@@ -56,9 +56,11 @@ const fetchRpcWithRetry = async (
   }
 };
 
-export async function GET(request: NextRequest, context: unknown) {
-  const { params } = context as { params: { NODE_NAME: string } };
-  const nodeName = params.NODE_NAME;
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ NODE_NAME: string }> }
+) {
+  const { NODE_NAME: nodeName } = await params;
   const nodeUrl = nodes[nodeName];
 
   if (!nodeUrl) {

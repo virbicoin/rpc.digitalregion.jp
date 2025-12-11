@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ThemeProvider from "@/app/components/ThemeProvider";
+import Header from "@/app/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,26 +25,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="w-full bg-gray-800 py-6 shadow-lg">
-          <div className="max-w-screen-lg mx-auto px-4">
-            <h1 className="text-4xl font-bold text-white text-center">
-              VirBiCoin Node Information
-            </h1>
+        <ThemeProvider>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1 max-w-screen-lg mx-auto px-4 w-full py-6">{children}</main>
+            <footer className="w-full footer-border mt-auto">
+              <div className="max-w-screen-lg mx-auto px-4 text-center py-6">
+                <p className="footer-text text-sm">
+                  &copy; 2024-{new Date().getFullYear()} Digitalregion, Inc. All Rights Reserved.
+                </p>
+              </div>
+            </footer>
           </div>
-        </header>
-        <main className="max-w-screen-lg mx-auto px-4">{children}</main>
-        <footer className="w-full bg-gray-800">
-          <div className="max-w-screen-lg mx-auto px-4 text-center py-6 text-white text-base">
-            <p>
-              &copy; 2024-{new Date().getFullYear()} Digitalregion, Inc. All Rights
-              Reserved.
-            </p>
-          </div>
-        </footer>
+        </ThemeProvider>
       </body>
     </html>
   );

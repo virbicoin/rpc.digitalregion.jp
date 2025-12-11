@@ -1,15 +1,14 @@
-import React from "react";
-import NodeStatus from "./components/NodeStatus";
-import ConnectionInfo from "./components/ConnectionInfo";
-import UsageGuide from "./components/UsageGuide";
-import SecurityInfo from "./components/SecurityInfo";
+import NodeStatus from "@/app/components/NodeStatus";
+import ConnectionInfo from "@/app/components/ConnectionInfo";
+import UsageGuide from "@/app/components/UsageGuide";
+import SecurityInfo from "@/app/components/SecurityInfo";
 
 export default function NodePage() {
   return (
-    <div className="p-6 bg-gray-950 min-h-screen text-gray-100">
-      <div className="max-w-screen-lg mx-auto">
-        <NodeStatus />
-        <ConnectionInfo />
+    <div className="space-y-6">
+      <NodeStatus />
+      <ConnectionInfo />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <UsageGuide />
         <SecurityInfo />
       </div>

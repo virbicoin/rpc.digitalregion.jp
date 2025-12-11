@@ -1,15 +1,14 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextPlugin from "@next/eslint-plugin-next";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import tseslint from "typescript-eslint";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
+export default tseslint.config(
   // グローバル設定
   {
     ignores: [
@@ -25,11 +24,16 @@ const eslintConfig = [
     ],
   },
 
-  // Next.js推奨設定
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // TypeScript設定
+  ...tseslint.configs.recommended,
 
   // プロジェクト全体に適用される設定
   {
+    plugins: {
+      "@next/next": nextPlugin,
+      react: reactPlugin,
+      "react-hooks": reactHooksPlugin,
+    },
     rules: {
       // 一般的なルール
       "no-console": "off", // console.logを許可
@@ -40,16 +44,15 @@ const eslintConfig = [
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off",
 
+      // React Hooks
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
       // Next.js固有のルール
       "@next/next/no-html-link-for-pages": "error",
       "@next/next/no-img-element": "warn",
-    },
-  },
 
-  // TypeScript固有の設定
-  {
-    files: ["**/*.ts", "**/*.tsx"],
-    rules: {
+      // TypeScript
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -58,9 +61,12 @@ const eslintConfig = [
         },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/consistent-type-imports": "warn", // 警告レベルに変更
+      "@typescript-eslint/consistent-type-imports": "warn",
     },
-  },
-];
-
-export default eslintConfig;
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+  }
+);

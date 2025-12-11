@@ -1,6 +1,6 @@
 {
   "name": "rpc.digitalregion.jp",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,24 +8,28 @@
     "build": "next build",
     "start": "bash -c 'set -a; [ -f .env ] && source .env; set +a; next start'",
     "start:port": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint app/",
+    "lint:fix": "eslint app/ --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.3.5",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "next": "^16.0.8",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@tailwindcss/postcss": "^4.1.11",
-    "@types/node": "^24.0.10",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "eslint": "^9.30.1",
-    "eslint-config-next": "15.3.5",
-    "tailwindcss": "^4.1.11",
-    "typescript": "^5.8.3"
+    "@eslint/eslintrc": "^3.3.3",
+    "@next/eslint-plugin-next": "^16.0.8",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^25.0.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
   }
 }
