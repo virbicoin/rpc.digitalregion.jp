@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import ThemeToggle from "@/app/components/ThemeToggle";
 
 export default function Header() {
@@ -9,21 +10,14 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex-1" />
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center glow-blue">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            </div>
+            <Image
+              src="/VBC.svg"
+              alt="VirBiCoin Logo"
+              width={48}
+              height={48}
+              className="drop-shadow-lg"
+              priority
+            />
             <h1 className="text-3xl md:text-4xl font-bold gradient-text">
               VirBiCoin Node
             </h1>
