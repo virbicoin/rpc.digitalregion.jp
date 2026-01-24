@@ -118,8 +118,19 @@ export async function GET(
     const peers = responses[2]?.status === 'fulfilled' && responses[2].value?.result
       ? parseInt(responses[2].value.result, 16)
       : 0;
-    const netListening = responses[3]?.status === 'fulfilled' && responses[3].value?.result === true;
-    const isServerRunning = netListening;
+    
+    // net_listeningが利用可能な場合はその結果を使用
+    // 利用不可（-32601エラー）の場合は、他のRPCが成功していればオンラインと判定
+    const netListeningResponse = responses[3]?.status === 'fulfilled' ? responses[3].value : null;
+    const netListeningAvailable = netListeningResponse && !netListeningResponse.error;
+    const netListening = netListeningAvailable && netListeningResponse.result === true;
+    
+    // eth_blockNumberが正常に取得できていればノードは稼働中
+    const blockNumberSuccess = responses[1]?.status === 'fulfilled' && 
+      responses[1].value?.result !== undefined && 
+      !responses[1].value?.error;
+    
+    const isServerRunning = netListeningAvailable ? netListening : blockNumberSuccess;
 
     return NextResponse.json({
       clientVersion,
